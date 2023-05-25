@@ -7,6 +7,7 @@ export default function HomePage() {
   const [ethWallet, setEthWallet] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [LTF, setLTFC] = useState(undefined);
+  const [userEntered_bool, setUserEntered] = useState(false);
 
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const LotteryABI = lottery_abi.abi;
@@ -81,9 +82,11 @@ export default function HomePage() {
     return fundingAmount;
   };
 
-  const ConfirmationWindow = async () => {
-    const userEnteredLottery = await LTF.checkEntryExists(account);
-    return userEnteredLottery;
+  const handleConfirm = async () => {
+    const CheckUserEntry = await LTF.checkuser();
+    //const CheckUserEntry = await LTF.request({ method: "checkuser" });
+
+    setUserEntered(CheckUserEntry);
   };
 
   const renderConfirmation = async () => {
@@ -126,6 +129,8 @@ export default function HomePage() {
       }
     }
   };
+
+  const statecheck = () => {};
 
   const initUser = () => {
     // Check to see if user has Metamask
@@ -191,67 +196,69 @@ export default function HomePage() {
       );
     }
 
-    if (ConfirmationWindow) {
-      renderConfirmation();
-    }
+    handleConfirm();
 
-    return (
-      <div>
-        <p> Your Account: {account} </p>
-        <p> Please fill the following details to enter the Lottery: </p>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ textAlign: "left" }}>
-            <p>
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "200px",
-                  textAlign: "left",
-                }}
-              >
-                Age:
-              </span>
-              <input style={{ textAlign: "right" }} className="userage" />
-            </p>
-            <p>
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "200px",
-                  textAlign: "left",
-                }}
-              >
-                Amount for lottery funding:
-              </span>
-              <input
-                style={{ textAlign: "right" }}
-                className="_fundingAmount"
-              />
-            </p>
+    if (userEntered_bool) {
+      renderConfirmation();
+    } else {
+      return (
+        <div>
+          <p> Your Account: {account} </p>
+          <p> Please fill the following details to enter the Lottery: </p>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ textAlign: "left" }}>
+              <p>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "200px",
+                    textAlign: "left",
+                  }}
+                >
+                  Age:
+                </span>
+                <input style={{ textAlign: "right" }} className="userage" />
+              </p>
+              <p>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "200px",
+                    textAlign: "left",
+                  }}
+                >
+                  Amount for lottery funding:
+                </span>
+                <input
+                  style={{ textAlign: "right" }}
+                  className="_fundingAmount"
+                />
+              </p>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <button
+              style={{
+                textAlign: "center",
+                marginTop: "20px",
+                width: "300px",
+                backgroundColor: "blue",
+                color: "white",
+              }}
+              onClick={Confirm_msg}
+            >
+              Fund Lottery
+            </button>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <button
-            style={{
-              textAlign: "center",
-              marginTop: "20px",
-              width: "300px",
-              backgroundColor: "blue",
-              color: "white",
-            }}
-            onClick={Confirm_msg}
-          >
-            Fund Lottery
-          </button>
-        </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (

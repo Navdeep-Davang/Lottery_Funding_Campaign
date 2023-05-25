@@ -11,6 +11,7 @@ contract Lottery_Entry {
     uint public Num_entries;
     uint public Entryfunding;
     uint public userage;
+    bool public UserEntryCheck = false;
 
     mapping(address => bool) public entryExists;
     mapping(address => uint)  entryFund;
@@ -31,6 +32,7 @@ contract Lottery_Entry {
        
         Entry_address.push(msg.sender);
         entryExists[msg.sender] = true;
+        UserEntryCheck = entryExists[msg.sender];
         entryFund[msg.sender] = ticket_price_USDC;
         Entryfunding = entryFund[msg.sender];
         Num_entries= Entry_address.length;
