@@ -7,10 +7,10 @@ contract Lottery is Lottery_Entry {
 
     uint public Userfunding;
 
-    function checkEntryExists(address userAddress) public view returns (bool) {
-        return entryExists[userAddress];
+     function checkuser() public returns (bool) {
+        return entryExists[msg.sender];
     }
-
+    
     function withdrawLotteryFunds() public {
         require(entryExists[msg.sender], "You have not entered the lottery");
         require(entryFund[msg.sender] > 0, "You have already withdrawn your funds");
